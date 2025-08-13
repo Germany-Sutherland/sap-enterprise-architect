@@ -1,0 +1,14 @@
+streamlit
+openai
+transformers
+torch
+qiskit
+pytesseract
+opencv-python-headless
+Pillow
+pandas
+numpy
+networkx
+graphviz
+spacy
+requests
