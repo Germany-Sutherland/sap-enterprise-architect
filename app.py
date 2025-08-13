@@ -1,59 +1,82 @@
 import streamlit as st
-import pandas as pd
+import json
+import random
 
-# ---- Core Agent Functions ---- #
-def agent_business_analysis(req):
-    return {"modules": ["S/4HANA", "Fiori", "BW/4HANA"], "external": []}
-
-def agent_architecture_design(parsed):
-    return {"hosting": "S/4HANA Cloud", "integration": ["SAP Cloud Connector"], "security": ["Role-Based Access Control"]}
-
-def agent_scalability(parsed):
-    return {"scalability": "Supports 1k+ users", "db": "HANA DB"}
-
-def agent_explanation(parsed, design):
-    return f"This architecture uses {', '.join(parsed['modules'])} hosted on {design['hosting']} with integrations {', '.join(design['integration'])}."
-
-def agent_fmea(parsed, design):
-    data = [
-        ["Module Failure", "Data loss risk", 8, 7, 6],
-        ["Integration Failure", "Downtime risk", 9, 5, 4]
+# -------------------------
+# Simulated "Agentic AI" Agents (mocked for free-tier MVP)
+# -------------------------
+def run_agentic_analysis(requirements):
+    agents = [
+        "Business Process Analyzer", "Integration Specialist",
+        "Data Migration Expert", "Security & Compliance Auditor",
+        "Performance Optimizer", "Cloud Architect",
+        "SAP S/4HANA Functional Expert", "SAP Basis Expert",
+        "Change Management Advisor", "Testing & QA Specialist",
+        "User Experience Designer", "Disaster Recovery Planner",
+        "Fiori Developer", "Custom ABAP Developer",
+        "Machine Learning Integrator", "IoT Integration Expert",
+        "Workflow Automation Specialist", "API Gateway Designer",
+        "Analytics & Reporting Engineer", "Data Governance Officer"
     ]
-    df = pd.DataFrame(data, columns=["Failure Mode", "Effect", "Severity", "Occurrence", "Detection"])
-    df["RPN"] = df["Severity"] * df["Occurrence"] * df["Detection"]
-    return df
 
-# ---- Streamlit UI ---- #
-st.set_page_config(page_title="SAP AI Enterprise Architect - MVP", layout="wide")
-st.title("SAP AI Enterprise Architect — Agentic (Free)")
+    results = {}
+    for agent in agents:
+        results[agent] = f"Analysis complete: {random.choice(['OK', 'Needs Review', 'Critical Risk'])}"
 
-req_text = st.text_area("Paste SAP enterprise requirements", height=150)
+    return results
 
-if st.button("Run Agentic Analysis"):
-    parsed = agent_business_analysis(req_text)
-    design = agent_architecture_design(parsed)
-    scale = agent_scalability(parsed)
-    explanation = agent_explanation(parsed, design)
-    fmea_df = agent_fmea(parsed, design)
 
-    st.subheader("Parsed Requirements")
-    st.json(parsed)
-
-    st.subheader("Proposed Architecture")
-    dot = f"""
-    digraph G {{
+# -------------------------
+# Generate Architecture Diagram in DOT format
+# -------------------------
+def generate_architecture_dot(requirements):
+    dot = """
+    digraph {
         rankdir=LR;
-        node [shape=box];
-        {" -> ".join(parsed['modules'])};
-        "{parsed['modules'][-1]}" -> "{design['hosting']}";
-    }}
+        node [shape=box, style=filled, color=lightblue];
+
+        "Business Layer" -> "Application Layer" -> "Database Layer";
+        "Application Layer" -> "SAP S/4HANA Core";
+        "SAP S/4HANA Core" -> "Analytics";
+        "SAP S/4HANA Core" -> "Integration Layer";
+        "Integration Layer" -> "Third-Party Systems";
+    }
     """
-    st.graphviz_chart(dot)  # This uses Streamlit's built-in Graphviz
+    return dot
 
-    st.subheader("Explanation")
-    st.write(explanation)
 
-    st.subheader("FMEA of Proposed Architecture")
-    st.dataframe(fmea_df)
+# -------------------------
+# Generate FMEA (mocked for MVP)
+# -------------------------
+def generate_fmea(requirements):
+    fmea = [
+        {"Failure Mode": "Integration failure", "Effect": "System downtime", "Severity": 9, "Occurrence": 4, "Detection": 5},
+        {"Failure Mode": "Data migration error", "Effect": "Incorrect reports", "Severity": 8, "Occurrence": 3, "Detection": 6},
+        {"Failure Mode": "Security breach", "Effect": "Data loss", "Severity": 10, "Occurrence": 2, "Detection": 4}
+    ]
+    return fmea
 
-    st.success("Analysis complete!")
+
+# -------------------------
+# Streamlit UI
+# -------------------------
+st.title("SAP Enterprise Architecture Generator (Free-tier MVP)")
+st.write("This tool uses simulated Agentic AI analysis to propose an SAP architecture and provide an FMEA.")
+
+requirements = st.text_area("Enter your SAP Enterprise Architecture Requirements", height=150)
+
+if st.button("Generate Architecture"):
+    if requirements.strip():
+        st.subheader("🔍 Agentic AI Multi-Agent Analysis")
+        results = run_agentic_analysis(requirements)
+        st.json(results)
+
+        st.subheader("🏗 Proposed SAP Architecture")
+        dot_code = generate_architecture_dot(requirements)
+        st.graphviz_chart(dot_code)
+
+        st.subheader("📋 FMEA of Proposed Architecture")
+        fmea_data = generate_fmea(requirements)
+        st.table(fmea_data)
+    else:
+        st.warning("Please enter requirements before generating.")
