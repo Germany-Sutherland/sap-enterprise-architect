@@ -1,14 +1,8 @@
 streamlit
-openai
-transformers
-torch
-qiskit
-pytesseract
-opencv-python-headless
-Pillow
 pandas
 numpy
+pytesseract
+Pillow
 networkx
-graphviz
-spacy
+matplotlib
 requests
