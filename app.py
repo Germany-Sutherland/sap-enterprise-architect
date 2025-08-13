@@ -1,6 +1,5 @@
 import streamlit as st
 import pandas as pd
-import graphviz
 
 # ---- Core Agent Functions ---- #
 def agent_business_analysis(req):
@@ -49,7 +48,7 @@ if st.button("Run Agentic Analysis"):
         "{parsed['modules'][-1]}" -> "{design['hosting']}";
     }}
     """
-    st.graphviz_chart(dot)
+    st.graphviz_chart(dot)  # This uses Streamlit's built-in Graphviz
 
     st.subheader("Explanation")
     st.write(explanation)
